@@ -1385,6 +1385,15 @@ class libcalendaring extends rcube_plugin
                 // check if the parsed object is an instance of a recurring event/task
                 array_walk($this->mail_ical_parser->objects, 'libcalendaring::identify_recurrence_instance');
 
+                // Assume default method when not provided
+                if(!$this->mail_ical_parser->method){
+
+                    // TODO: Should probably be "PUBLISH"
+                    //       Requires more changes in the way iTip/ics attached to mail are handled
+
+                    $this->mail_ical_parser->method = 'REQUEST';
+                }
+
                 // stop on the part that has an iTip method specified
                 if (count($this->mail_ical_parser->objects) && $this->mail_ical_parser->method) {
                     $this->mail_ical_parser->message_date = $this->ical_message->headers->date;
